@@ -7,7 +7,7 @@ app = Flask(__name__)
 class DummyModel:
     def predict(self, X):
         # Example: return the sum of each row
-        return [sum(row) for row in X]
+        return [sum(row)/len(row) for row in X]
 
 MODEL = DummyModel()
 
@@ -20,7 +20,7 @@ def predict():
 
 @app.route("/")
 def home():
-    return "Im in the middle of a lecture"
+    return "Im in the middle of a lecture again"
 
 if __name__ == "__main__":
     app.run(debug=True)
