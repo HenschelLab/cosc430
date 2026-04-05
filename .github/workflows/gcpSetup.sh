@@ -25,6 +25,26 @@ gcloud projects add-iam-policy-binding cosc430deploy \
   --member "serviceAccount:github-deployer@cosc430deploy.iam.gserviceaccount.com" \
   --role "roles/iam.serviceAccountUser"
 
+#GCP migrated GCR (gcr.io) to run on Artifact Registry under the hood, so Storage Admin is 
+#no longer sufficient. Need to grant the Artifact Registry Writer role:
+gcloud projects add-iam-policy-binding cosc430deploy \
+  --member "serviceAccount:github-deployer@cosc430deploy.iam.gserviceaccount.com" \
+  --role "roles/artifactregistry.writer"
+gcloud services enable artifactregistry.googleapis.com
+
 # Download the JSON key
 gcloud iam service-accounts keys create key.json \
   --iam-account github-deployer@cosc430deploy.iam.gserviceaccount.com
+
+#The Cloud Run deployment gives you a public URL. Get it with:
+gcloud run services describe flask-model-api \
+  --region us-central1 \
+  --project cosc430deploy \
+  --format "value(status.url)"
+
+# pseudo commands
+#gcloud services enable apis
+#gcloud iam # github-deployer roles
+#gcloud run services
+
+
